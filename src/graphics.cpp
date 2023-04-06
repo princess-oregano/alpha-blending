@@ -10,7 +10,7 @@ gr_image(sf::Image *image, const sf::Uint8 *bk, const sf::Uint8 *fr)
         assert(image);
         assert(bk && fr);
         
-        calc_no_avx(image, (WINDOW_WIDTH - BACK_WIDTH) / 2, (WINDOW_HEIGHT - BACK_HEIGHT) / 2, bk, fr);
+        calc_avx(image, (WINDOW_WIDTH - BACK_WIDTH) / 2, (WINDOW_HEIGHT - BACK_HEIGHT) / 2, bk, fr);
 }
 
 void
