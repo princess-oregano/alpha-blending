@@ -18,6 +18,9 @@ void
 calc_no_avx(sf::Image *image, int x_tl, int y_tl, const sf::Uint8 *bk_pix, const sf::Uint8 *fr_pix);
 // Same as calc_no_avx(), but using AVX/AVX2 optimization.
 void
-calc_avx(sf::Image *image, int x_tl, int y_tl, const sf::Uint8 *bk_pix, const sf::Uint8 *fr_pix);
+calc_avx_4pix(sf::Image *image, int x_tl, int y_tl, const sf::Uint8 *bk_pix, const sf::Uint8 *fr_pix);
+// Enhanced version of calc_avx_4pix().
+void
+calc_avx_8pix(sf::Image *image, int x_tl, int y_tl, const sf::Uint8 *bk_pix, const sf::Uint8 *fr_pix);
 #endif // CALC_H
 

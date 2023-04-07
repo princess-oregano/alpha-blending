@@ -5,12 +5,14 @@
 
 // Builds general image.
 static void
-gr_image(sf::Image *image, const sf::Uint8 *bk, const sf::Uint8 *fr)
+gr_image(sf::Image *image, const sf::Uint8 *bk, const sf::Uint8 *fr,
+        void (*calc)(sf::Image *image, int x_tl, int y_tl, 
+                const sf::Uint8 *bk_pix, const sf::Uint8 *fr_pix))
 {
         assert(image);
         assert(bk && fr);
         
-        calc_avx(image, (WINDOW_WIDTH - BACK_WIDTH) / 2, (WINDOW_HEIGHT - BACK_HEIGHT) / 2, bk, fr);
+        calc(image, (WINDOW_WIDTH - BACK_WIDTH) / 2, (WINDOW_HEIGHT - BACK_HEIGHT) / 2, bk, fr);
 }
 
 void
@@ -20,8 +22,17 @@ gr_frame(sf::RenderWindow *window, sf::Image *image, const sf::Uint8 *bk, const 
         assert(window);
         assert(bk && fr);
         assert(font);
+        
+        void (*calc)(sf::Image *image, int x_tl, int y_tl, 
+                const sf::Uint8 *bk_pix, const sf::Uint8 *fr_pix) = &calc_no_avx;
+        // Choose function to process image(AVX/no AVX).
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1))
+                calc = &calc_avx_4pix;
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::F2))
+                calc = &calc_avx_8pix;
 
-        gr_image(image, bk, fr);
+
+        gr_image(image, bk, fr, calc);
 
         // A long transformation of image to window, because
         // SFML works this way.

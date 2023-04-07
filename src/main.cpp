@@ -2,6 +2,9 @@
 #include "graphics.h"
 #include "calc.h"
 
+// Each AV_FRAME make FPS update.
+const int AV_FRAME = 500;
+
 int
 main()
 {
@@ -27,7 +30,7 @@ main()
         sf::Image image;
         image.loadFromFile("Table.bmp");
 
-        while (window.isOpen()) {
+        for (int i = 0; window.isOpen(); i++) {
                 sf::Event event;
                 while (window.pollEvent(event)) {
                         if (event.type == sf::Event::Closed) {
@@ -35,15 +38,14 @@ main()
                         }
                 }
 
-                // Choose function to process image(AVX/no AVX).
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1))
-                        ;
-
                 gr_frame(&window, &image, bk_pix, fr_pix, fps, &font);
 
-                currentTime = clock.getElapsedTime();
-                fps = 1.0f / (currentTime.asSeconds() - previousTime.asSeconds());
-                previousTime = currentTime;
+                if (i % AV_FRAME == 0) {
+                        currentTime = clock.getElapsedTime();
+                        fps = i / (currentTime.asSeconds() - previousTime.asSeconds());
+                        previousTime = currentTime;
+                        i = 0;
+                }
         }
 
         return 0;
